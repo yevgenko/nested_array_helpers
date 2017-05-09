@@ -1,7 +1,6 @@
 class ArrayHash < Array
-  def sort_node(*args)
+  def sort_node(parent, child)
     self.class.new self.map { |item|
-      parent, child = args
       item[parent] = item[parent].sort_by { |p| p[child] }
       item
     }
