@@ -120,6 +120,12 @@ class NestedArrayTest < Minitest::Test
     assert_equal 'bar', arr.bar
   end
 
+  def test_nested_array_module
+    orders = tricky_orders
+    orders.extend(NestedArrayHelpers)
+    orders.sort_nested_array(:products, :sku).sort_by_nested_array(:products, :sku)
+  end
+
   def test_minitest_mock
     mock = Minitest::Mock.new
     mock.expect :sort_nested_array, true, [:products, :sku]
