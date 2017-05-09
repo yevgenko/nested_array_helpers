@@ -1,6 +1,18 @@
 require 'test_helper'
 
 class SortNestedArrayTest < Minitest::Test
+  def test_without_sorting
+    expected = [
+      { id: 1, products: [ { sku: 'c' }, { sku: 'a' }, { sku: 'b' } ] }
+    ]
+    a = [
+      { id: 1, products: [ { sku: 'c' }, { sku: 'a' }, { sku: 'b' } ] }
+    ]
+    a.extend(NestedArrayHelpers)
+
+    assert_equal expected, a
+  end
+
   def test_sort_node_by_sku
     expected = [
       { id: 1, products: [ { sku: 'a' }, { sku: 'b' }, { sku: 'c' } ] }
