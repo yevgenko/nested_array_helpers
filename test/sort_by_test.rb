@@ -4,18 +4,18 @@ require_relative '../lib/array_hash'
 
 class SortByTest < Minitest::Test
   def test_empty_array_hash
-    assert_equal [], ArrayHash.new
+    assert_equal [], NestedArray.new
   end
 
   def test_non_empty_array_hash
-    assert_equal [{id: 1}], ArrayHash.new([{id: 1}])
+    assert_equal [{id: 1}], NestedArray.new([{id: 1}])
   end
 
   def test_sort_node_by_sku
     expected = [
       { id: 1, products: [ { sku: 'a' }, { sku: 'b' }, { sku: 'c' } ] }
     ]
-    a = ArrayHash.new [
+    a = NestedArray.new [
       { id: 1, products: [ { sku: 'c' }, { sku: 'a' }, { sku: 'b' } ] }
     ]
 
@@ -26,7 +26,7 @@ class SortByTest < Minitest::Test
     expected = [
       { id: 1, products: [ { title: 'a' }, { title: 'b' }, { title: 'c' } ] }
     ]
-    a = ArrayHash.new [
+    a = NestedArray.new [
       { id: 1, products: [ { title: 'c' }, { title: 'a' }, { title: 'b' } ] }
     ]
 
@@ -37,7 +37,7 @@ class SortByTest < Minitest::Test
     expected = [
       { id: 1, line_items: [ { title: 'a' }, { title: 'b' }, { title: 'c' } ] }
     ]
-    a = ArrayHash.new [
+    a = NestedArray.new [
       { id: 1, line_items: [ { title: 'c' }, { title: 'a' }, { title: 'b' } ] }
     ]
 
@@ -59,7 +59,7 @@ class SortByTest < Minitest::Test
 
   def test_sort_by_sku
     expected = [3, 2, 1]
-    assert_equal expected, ArrayHash.new(orders).sort_by_nested_array(:products, :sku).map{ |o| o[:id] }
+    assert_equal expected, NestedArray.new(orders).sort_by_nested_array(:products, :sku).map{ |o| o[:id] }
   end
 
   def multi_products_orders
@@ -72,7 +72,7 @@ class SortByTest < Minitest::Test
 
   def test_multi_products_sort_by_sku
     expected = [3, 2, 1]
-    assert_equal expected, ArrayHash.new(multi_products_orders).sort_by_nested_array(:products, :sku).map{ |o| o[:id] }
+    assert_equal expected, NestedArray.new(multi_products_orders).sort_by_nested_array(:products, :sku).map{ |o| o[:id] }
   end
 
   def tricky_orders
@@ -85,7 +85,7 @@ class SortByTest < Minitest::Test
 
   def test_tricky_orders_sort_by_sku
     expected = [2, 3, 1]
-    assert_equal expected, ArrayHash.new(tricky_orders).sort_by_nested_array(:products, :sku).map{ |o| o[:id] }
+    assert_equal expected, NestedArray.new(tricky_orders).sort_by_nested_array(:products, :sku).map{ |o| o[:id] }
   end
 
   def book_orders
@@ -98,7 +98,7 @@ class SortByTest < Minitest::Test
 
   def test_another_array_sort_by_nested_array
     expected = [2, 3, 1]
-    assert_equal expected, ArrayHash.new(book_orders).sort_by_nested_array(:books, :isbn).map{ |o| o[:id] }
+    assert_equal expected, NestedArray.new(book_orders).sort_by_nested_array(:books, :isbn).map{ |o| o[:id] }
   end
 
   module Foobar
@@ -124,8 +124,8 @@ class SortByTest < Minitest::Test
     mock = Minitest::Mock.new
     mock.expect :sort_nested_array, true, [:products, :sku]
 
-    ArrayHash.stub :new, mock do
-      arr = ArrayHash.new [3, 1, 2]
+    NestedArray.stub :new, mock do
+      arr = NestedArray.new [3, 1, 2]
       arr.sort_nested_array(:products, :sku)
 
       assert mock.verify

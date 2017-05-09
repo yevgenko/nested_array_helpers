@@ -1,4 +1,4 @@
-class ArrayHash < Array
+class NestedArray < Array
   def sort_nested_array(node_key, nested_array_key)
     self.class.new self.map { |item|
       item[node_key].sort_by! { |nested_item| nested_item[nested_array_key] }
