@@ -59,7 +59,7 @@ class SortByTest < Minitest::Test
 
   def test_sort_by_sku
     expected = [3, 2, 1]
-    assert_equal expected, orders.sort_by{ |o| o[:products].map{ |p| p[:sku] } }.map{ |o| o[:id] }
+    assert_equal expected, ArrayHash.new(orders).sort_by_nested_array(:products, :sku).map{ |o| o[:id] }
   end
 
   def multi_products_orders
@@ -72,7 +72,7 @@ class SortByTest < Minitest::Test
 
   def test_multi_products_sort_by_sku
     expected = [3, 2, 1]
-    assert_equal expected, multi_products_orders.sort_by{ |o| o[:products].map{ |p| p[:sku] } }.map{ |o| o[:id] }
+    assert_equal expected, ArrayHash.new(multi_products_orders).sort_by_nested_array(:products, :sku).map{ |o| o[:id] }
   end
 
   def tricky_orders
@@ -85,7 +85,20 @@ class SortByTest < Minitest::Test
 
   def test_tricky_orders_sort_by_sku
     expected = [2, 3, 1]
-    assert_equal expected, tricky_orders.sort_by{ |o| o[:products].map{ |p| p[:sku] } }.map{ |o| o[:id] }
+    assert_equal expected, ArrayHash.new(tricky_orders).sort_by_nested_array(:products, :sku).map{ |o| o[:id] }
+  end
+
+  def book_orders
+    [
+      { id: 1, books: [ { isbn: 'c' }, { isbn: 'a' }, { isbn: 'c' } ] },
+      { id: 2, books: [ { isbn: 'a' }, { isbn: 'c' }, { isbn: 'a' } ] },
+      { id: 3, books: [ { isbn: 'b' }, { isbn: 'b' }, { isbn: 'b' } ] }
+    ]
+  end
+
+  def test_another_array_sort_by_nested_array
+    expected = [2, 3, 1]
+    assert_equal expected, ArrayHash.new(book_orders).sort_by_nested_array(:books, :isbn).map{ |o| o[:id] }
   end
 
   def test_tricky_orders_double_sort_by_sku
