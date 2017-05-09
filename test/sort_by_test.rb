@@ -108,26 +108,27 @@ class SortByTest < Minitest::Test
       { id: 3, products: [ { sku: 'b' }, { sku: 'b' }, { sku: 'b' } ] }
     ]
 
-    orders = tricky_orders.map do |o|
-      o[:products] = o[:products].sort_by{ |p| p[:sku] }
-      o
-    end
-
-    assert_equal expected, orders.sort_by{ |o| o[:products].map{ |p| p[:sku] } }
+    assert_equal expected, ArrayHash.new(
+      ArrayHash.new(tricky_orders).sort_node(:products, :sku)
+    ).sort_by_nested_array(:products, :sku)
   end
 
-  def test_tricky_orders_double_sort_by_sku_v2
-    expected= [
-      { id: 2, products: [ { sku: 'a' }, { sku: 'a' }, { sku: 'c' } ] },
-      { id: 1, products: [ { sku: 'a' }, { sku: 'c' }, { sku: 'c' } ] },
-      { id: 3, products: [ { sku: 'b' }, { sku: 'b' }, { sku: 'b' } ] }
-    ]
-
-    orders = tricky_orders.sort_by do |o|
-      o[:products] = o[:products].sort_by{ |p| p[:sku] }
-      o[:products].map{ |p| p[:sku] }
+  module Foobar
+    def foo
+      'foo'
     end
 
-    assert_equal expected, orders
+    def bar
+      'bar'
+    end
+  end
+
+  def test_array_extension
+    arr = [3, 1, 2]
+    arr.extend(Foobar)
+    assert_equal 'foo', arr.foo
+    arr.sort_by!{ |i| i }
+    assert_equal [1, 2, 3], arr
+    assert_equal 'bar', arr.bar
   end
 end
