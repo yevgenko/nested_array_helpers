@@ -2,7 +2,7 @@ gem 'minitest', '~> 5.4'
 require 'minitest/autorun'
 require_relative '../lib/nested_array'
 
-class SortByTest < Minitest::Test
+class NestedArrayTest < Minitest::Test
   def test_empty_array_hash
     assert_equal [], NestedArray.new
   end
