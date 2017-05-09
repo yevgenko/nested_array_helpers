@@ -101,18 +101,6 @@ class SortByTest < Minitest::Test
     assert_equal expected, ArrayHash.new(book_orders).sort_by_nested_array(:books, :isbn).map{ |o| o[:id] }
   end
 
-  def test_tricky_orders_double_sort_by_sku
-    expected= [
-      { id: 2, products: [ { sku: 'a' }, { sku: 'a' }, { sku: 'c' } ] },
-      { id: 1, products: [ { sku: 'a' }, { sku: 'c' }, { sku: 'c' } ] },
-      { id: 3, products: [ { sku: 'b' }, { sku: 'b' }, { sku: 'b' } ] }
-    ]
-
-    assert_equal expected, ArrayHash.new(tricky_orders).
-      sort_node(:products, :sku).
-      sort_by_nested_array(:products, :sku)
-  end
-
   module Foobar
     def foo
       'foo'
@@ -130,5 +118,17 @@ class SortByTest < Minitest::Test
     arr.sort_by!{ |i| i }
     assert_equal [1, 2, 3], arr
     assert_equal 'bar', arr.bar
+  end
+
+  def test_minitest_mock
+    mock = Minitest::Mock.new
+    mock.expect :sort_node, true, [:products, :sku]
+
+    ArrayHash.stub :new, mock do
+      arr = ArrayHash.new [3, 1, 2]
+      arr.sort_node(:products, :sku)
+
+      assert mock.verify
+    end
   end
 end
