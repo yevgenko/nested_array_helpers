@@ -1,7 +1,49 @@
 gem 'minitest', '~> 5.4'
 require 'minitest/autorun'
+require_relative '../lib/array_hash'
 
 class SortByTest < Minitest::Test
+  def test_empty_array_hash
+    assert_equal [], ArrayHash.new
+  end
+
+  def test_non_empty_array_hash
+    assert_equal [{id: 1}], ArrayHash.new([{id: 1}])
+  end
+
+  def test_sort_node_by_sku
+    expected = [
+      { id: 1, products: [ { sku: 'a' }, { sku: 'b' }, { sku: 'c' } ] }
+    ]
+    a = ArrayHash.new [
+      { id: 1, products: [ { sku: 'c' }, { sku: 'a' }, { sku: 'b' } ] }
+    ]
+
+    assert_equal expected, a.sort_node(:products, :sku)
+  end
+
+  def test_sort_node_by_title
+    expected = [
+      { id: 1, products: [ { title: 'a' }, { title: 'b' }, { title: 'c' } ] }
+    ]
+    a = ArrayHash.new [
+      { id: 1, products: [ { title: 'c' }, { title: 'a' }, { title: 'b' } ] }
+    ]
+
+    assert_equal expected, a.sort_node(:products, :title)
+  end
+
+  def test_sort_another_node_by_title
+    expected = [
+      { id: 1, line_items: [ { title: 'a' }, { title: 'b' }, { title: 'c' } ] }
+    ]
+    a = ArrayHash.new [
+      { id: 1, line_items: [ { title: 'c' }, { title: 'a' }, { title: 'b' } ] }
+    ]
+
+    assert_equal expected, a.sort_node(:line_items, :title)
+  end
+
   def orders
     [
       { id: 1, products: [ { sku: 'c' } ] },
