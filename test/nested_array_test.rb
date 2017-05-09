@@ -100,38 +100,3 @@ module NestedArrayHelpersTest
     end
   end
 end
-
-class NestedArrayTest < Minitest::Test
-  def tricky_orders
-    [
-      { id: 1, products: [ { sku: 'c' }, { sku: 'a' }, { sku: 'c' } ] },
-      { id: 2, products: [ { sku: 'a' }, { sku: 'c' }, { sku: 'a' } ] },
-      { id: 3, products: [ { sku: 'b' }, { sku: 'b' }, { sku: 'b' } ] }
-    ].extend(NestedArrayHelpers)
-  end
-
-  module Foobar
-    def foo
-      'foo'
-    end
-
-    def bar
-      'bar'
-    end
-  end
-
-  def test_array_extension
-    arr = [3, 1, 2]
-    arr.extend(Foobar)
-    assert_equal 'foo', arr.foo
-    arr.sort_by!{ |i| i }
-    assert_equal [1, 2, 3], arr
-    assert_equal 'bar', arr.bar
-  end
-
-  def test_nested_array_module
-    orders = tricky_orders
-    orders.extend(NestedArrayHelpers)
-    orders.sort_nested_array(:products, :sku).sort_by_nested_array(:products, :sku)
-  end
-end
