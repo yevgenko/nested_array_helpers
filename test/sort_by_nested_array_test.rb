@@ -9,7 +9,7 @@ class SortByNestedArrayTest < Minitest::Test
     ].extend(NestedArrayHelpers)
   end
 
-  def test_without_sort_by
+  def test_without_sorting
     expected = [1, 2, 3]
     assert_equal expected, orders.map{ |o| o[:id] }
   end
@@ -53,7 +53,7 @@ class SortByNestedArrayTest < Minitest::Test
     ].extend(NestedArrayHelpers)
   end
 
-  def test_another_array_sort_by_nested_array
+  def test_with_another_array_of_hashes
     expected = [2, 3, 1]
     assert_equal expected, book_orders.sort_by_nested_array(:books, :isbn).map{ |o| o[:id] }
   end
