@@ -1,6 +1,6 @@
 gem 'minitest', '~> 5.4'
 require 'minitest/autorun'
-require_relative '../lib/array_hash'
+require_relative '../lib/nested_array'
 
 class SortByTest < Minitest::Test
   def test_empty_array_hash
