@@ -19,7 +19,7 @@ class SortByTest < Minitest::Test
       { id: 1, products: [ { sku: 'c' }, { sku: 'a' }, { sku: 'b' } ] }
     ]
 
-    assert_equal expected, a.sort_node(:products, :sku)
+    assert_equal expected, a.sort_nested_array_by_key(:products, :sku)
   end
 
   def test_sort_node_by_title
@@ -30,7 +30,7 @@ class SortByTest < Minitest::Test
       { id: 1, products: [ { title: 'c' }, { title: 'a' }, { title: 'b' } ] }
     ]
 
-    assert_equal expected, a.sort_node(:products, :title)
+    assert_equal expected, a.sort_nested_array_by_key(:products, :title)
   end
 
   def test_sort_another_node_by_title
@@ -41,7 +41,7 @@ class SortByTest < Minitest::Test
       { id: 1, line_items: [ { title: 'c' }, { title: 'a' }, { title: 'b' } ] }
     ]
 
-    assert_equal expected, a.sort_node(:line_items, :title)
+    assert_equal expected, a.sort_nested_array_by_key(:line_items, :title)
   end
 
   def orders
@@ -122,11 +122,11 @@ class SortByTest < Minitest::Test
 
   def test_minitest_mock
     mock = Minitest::Mock.new
-    mock.expect :sort_node, true, [:products, :sku]
+    mock.expect :sort_nested_array_by_key, true, [:products, :sku]
 
     ArrayHash.stub :new, mock do
       arr = ArrayHash.new [3, 1, 2]
-      arr.sort_node(:products, :sku)
+      arr.sort_nested_array_by_key(:products, :sku)
 
       assert mock.verify
     end
