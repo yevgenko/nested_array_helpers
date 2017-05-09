@@ -108,9 +108,9 @@ class SortByTest < Minitest::Test
       { id: 3, products: [ { sku: 'b' }, { sku: 'b' }, { sku: 'b' } ] }
     ]
 
-    assert_equal expected, ArrayHash.new(
-      ArrayHash.new(tricky_orders).sort_node(:products, :sku)
-    ).sort_by_nested_array(:products, :sku)
+    assert_equal expected, ArrayHash.new(tricky_orders).
+      sort_node(:products, :sku).
+      sort_by_nested_array(:products, :sku)
   end
 
   module Foobar
